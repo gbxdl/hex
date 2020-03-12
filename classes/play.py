@@ -1,12 +1,18 @@
 import time
+from tkinter import *
+from classes.gui import *
+
 class play:
-    def __init__(self, gameState):
-        None
+    def __init__(self):
+        pass
         # self.run(gameState)
 
-    def run(self, gameState):
+    def run(self, gameState, guiOn):
         gameover=0
         onMove=1
+        if guiOn:
+            window = Tk()
+            GUI = gui(window, gameState)
         while not gameover:
             move = gameState.Player[onMove-1].makeMove(gameState)
             gameState.position[move]=onMove
@@ -19,4 +25,6 @@ class play:
                 #     print('Black won!')
                 break
             onMove=3-onMove
-        return onMove
+
+        if window:
+            window.mainloop()
