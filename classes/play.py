@@ -7,24 +7,34 @@ class play:
         pass
         # self.run(gameState)
 
-    def run(self, gameState, guiOn):
-        gameover=0
-        onMove=1
-        if guiOn:
+    def run(self, gameState):
+        if gameState.guiOn: #GUI on
+            print('GUI is on')
             window = Tk()
             GUI = gui(window, gameState)
-        while not gameover:
-            move = gameState.Player[onMove-1].makeMove(gameState)
-            gameState.position[move]=onMove
-            # print(gameState.position)
-            gameover=gameState.gameover(move,onMove)#takes position and lastMoveBy
-            if gameover:
-                # if onMove==1:
-                #     print('White won!')
-                # else:
-                #     print('Black won!')
-                break
-            onMove=3-onMove
-
-        if window:
+            GUI.initInteract()
             window.mainloop()
+
+        else: #GUI off
+            gameover=0
+            while not gameover:
+                move = gameState.bot.makeMove(gameState)
+                gameState.position[move]=gameState.onMove
+                gameState.lastMove = move
+                # print(gameState.position)
+                gameover=gameState.gameover()#takes position and lastMoveBy
+                if gameover:
+                    if gameState.onMove==1:
+                        print('Blue won!')
+                    else:
+                        print('Red won!')
+                    break
+                gameState.onMove=3-gameState.onMove
+            
+            showFinalPosition=0
+            if showFinalPosition:
+                window = Tk()
+                GUI = gui(window, gameState)
+                GUI.drawPosition()
+                window.mainloop()
+            

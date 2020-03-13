@@ -1,34 +1,90 @@
 from tkinter import *
+from classes.human import *
 import math
+import time
 
 class gui:
     
-    def __init__(self,tk,gameState):
+    def __init__(self,window,gameState):
         self.canvasWidth = 1300
         self.canvasHeight = 800
-        self.tk = tk
+        self.window = window
         self.gameState = gameState
-        self.tk.title('Hex')
+        self.width = self.canvasHeight / (self.gameState.sizeBoard)
+        self.fromTheEdge=self.width
+        self.window.title('Hex')
+        
+    def initInteract(self):
         self.drawCanvas()
         self.drawLattice()
+        self.restartButton()
+        if self.gameState.humans == [False,False]:
+            self.gamePlay()
+        else:
+            self.window.bind("<Button-1>", self.gamePlay)
 
+    def gamePlay(self,event=None):
+        man = human()
+        while 1:
+            move = 0
+            print(self.gameState.onMove)
+            if event and self.gameState.onMove == 1:
+                move = man.makeMove(self.gameState, event, self.fromTheEdge, self.width)
+            elif self.gameState.onMove == 2:
+                move = self.gameState.bot.makeMove(self.gameState)
+                print('bot move', move)
+                # time.sleep(.1)
+            if move==0:
+                return
+            self.gameState.position[move]=self.gameState.onMove
+            self.gameState.lastMove = move
+            self.drawMove(move[0],move[1])
+            self.window.update()
+            # print(self.gameState.position)
+            gameover=self.gameState.gameover()
+            if gameover:
+                if self.gameState.onMove==1:
+                    print('Blue won!')
+                else:
+                    print('Red won!')
+                if self.gameState.humans != [False,False]:
+                    self.window.unbind("<Button-1>")
+                return
+            self.gameState.onMove=3-self.gameState.onMove
+        
+    def drawMove(self,row,col):#draws the move at coordinates row,col
+        hexagon = self.hexagon(row,col)
+        if self.gameState.onMove==1:
+            self.canvas.create_polygon(hexagon,fill='blue',outline='black', width=2)
+        else:
+            self.canvas.create_polygon(hexagon,fill='red',outline='black', width=2)
+            
     def drawCanvas(self):
-        self.canvas = Canvas(self.tk, width=self.canvasWidth, height=self.canvasHeight)
+        self.canvas = Canvas(self.window, width=self.canvasWidth, height=self.canvasHeight)
         self.canvas.pack()
         
     def drawLattice(self):
-        width = self.canvasHeight / (self.gameState.sizeBoard)
-        fromTheEdge=width
-        for i in range(self.gameState.sizeBoard):
-            for j in range(self.gameState.sizeBoard):
-                x = (i+j/2)*width + fromTheEdge
-                y=j*(math.sqrt(3)/2*width) + fromTheEdge
-                hexagon=self.hexagon(x,y,width)
+        for row in range(self.gameState.sizeBoard):
+            for col in range(self.gameState.sizeBoard):
+                hexagon=self.hexagon(row,col)
                 self.canvas.create_polygon(hexagon,fill='white',outline='black', width=2)
                 
-    def hexagon(self,x,y,width):
-        #draw a hexagon around position x,y with R, r as on https://en.wikipedia.org/wiki/Hexagon
-        r = width/2
+    def drawPosition(self):
+        self.drawCanvas()
+        for row in range(self.gameState.sizeBoard):
+            for col in range(self.gameState.sizeBoard):
+                hexagon=self.hexagon(row,col)
+                if self.gameState.position[row,col] == 0:
+                    self.canvas.create_polygon(hexagon,fill='white',outline='black', width=2)
+                elif self.gameState.position[row,col] == 1:
+                    self.canvas.create_polygon(hexagon,fill='blue',outline='black', width=2)
+                else:
+                    self.canvas.create_polygon(hexagon,fill='red',outline='black', width=2)
+        
+    def hexagon(self,row,col): #draw a hexagon around position x,y with R, r as on https://en.wikipedia.org/wiki/Hexagon
+        x = (col+row/2)*self.width + self.fromTheEdge
+        y=row*(math.sqrt(3)/2*self.width) + self.fromTheEdge
+        r = self.width/2
         R = r * 2/math.sqrt(3)
         top=(x,y-R)
         bottom=(x,y+R)
@@ -36,80 +92,16 @@ class gui:
         bottomLeft=(x-r,y+R/2)
         topRight=(x+r,y-R/2)
         bottomRight=(x+r,y+R/2)
-        
         return [top,topRight,bottomRight,bottom,bottomLeft,topLeft]
         
+    def restartButton(self):
+        reset_button = Button(self.window, text="New game",command = self.restart())
+        reset_button.pack(side=LEFT)
+    
+    def restart(self):
+        self.gameState.resetGameState()
+        self.canvas.destroy()
+        self.drawCanvas()
+        self.drawLattice()
+    
         
-
-class HexaCanvas(Canvas):
-    """ A canvas that provides a create-hexagone method """
-    def __init__(self, master):
-        Canvas.__init__(self, master)
-
-        self.hexaSize = 20
-
-    def setHexaSize(self, number):
-        self.hexaSize = number
-
-    def create_hexagone(self, x, y):
-        size = self.hexaSize
-        dx = (size**2 - (size/2)**2)**0.5
-
-        point1 = (x+dx, y+size/2)
-        point2 = (x+dx, y-size/2)
-        point3 = (x   , y-size  )
-        point4 = (x-dx, y-size/2)
-        point5 = (x-dx, y+size/2)
-        point6 = (x   , y+size  )
-
-        self.create_line(point1, point2, width=2)
-        self.create_line(point2, point3, width=2)
-        self.create_line(point3, point4, width=2)
-        self.create_line(point4, point5, width=2)
-        self.create_line(point5, point6, width=2)
-        self.create_line(point6, point1, width=2)
-
-        # self.create_polygon(point1, point2, point3, point4, point5, point6)
-
-class HexagonalGrid(HexaCanvas):
-    """ A grid whose each cell is hexagonal """
-    def __init__(self, master, scale, grid_width, grid_height, *args, **kwargs):
-
-        dx     = (scale**2 - (scale/2.0)**2)**0.5
-        width  = 2 * dx * grid_width + dx
-        height = 1.5 * scale * grid_height + 0.5 * scale
-
-        HexaCanvas.__init__(self, master)
-        self.setHexaSize(scale)
-
-    def setCell(self, xCell, yCell):
-        size = self.hexaSize
-        dx = (size**2 - (size/2)**2)**0.5
-
-        pix_x = dx + 2*dx*xCell
-        if yCell%2 ==1 :
-            pix_x += dx
-
-        pix_y = size + yCell*1.5*size
-
-        self.create_hexagone(pix_x, pix_y)
-
-
-
-# if __name__ == "__main__":
-#     tk = Tk()
-# 
-#     grid = HexagonalGrid(tk, scale = 50, grid_width=4, grid_height=4)
-#     grid.grid(row=0, column=0, padx=5, pady=5)
-# 
-#     def correct_quit(tk):
-#         tk.destroy()
-#         tk.quit()
-# 
-#     quit = Button(tk, text = "Quit", command = lambda: correct_quit(tk))
-#     quit.grid(row=1, column=0)
-#     for i in range(10):
-#         for j in range(10):
-#             grid.setCell(i,j)
-# 
-#     tk.mainloop()

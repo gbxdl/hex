@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-
-#start without a human player. Just have random moves.
 from classes.gameState import *
 from classes.play import *
 import time
 
-sizeBoard = 11
-guiOn = True
-
-gameState = gameState(sizeBoard)
+gameState = gameState()
 play = play()
 
-play.run(gameState,guiOn)
+play.run(gameState)
 
 # 
 # tic=time.time()
