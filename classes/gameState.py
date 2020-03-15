@@ -75,6 +75,14 @@ class gameState:
                 neighbours.append(pos2)
         return neighbours
         
+    def distance(self,pos1,pos2):#calculate distance between two possitions in ...
+        x1 = col+row/2
+        y1 = row*math.sqrt(3)/2
+        x2 = pos[1]+pos[0]/2
+        y2 = pos[0]*math.sqrt(3)/2
+        
+        return math.sqrt( (x1-x2)**2 + (y1-y2)**2 )
+        
     def resetGameState(self):
         self.position = self.startPosition(self.sizeBoard)
         self.initBfs()

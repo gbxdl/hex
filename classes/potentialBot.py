@@ -24,18 +24,10 @@ class potentialBot:
         if lastMoveByMe:
             for row in range(gameState.sizeBoard):
                 for col in range(gameState.sizeBoard):
-                    if self.distance((row,col),lastMove) > 5:
+                    if gameState.distance((row,col),lastMove) > 5:
                         continue
-                    print(self.distance(row,col,lastMove))
-                    print(row,col)
-                        
-    def distance(self,pos1,pos2):#calculate distance between two possitions in ...
-        x1 = col+row/2
-        y1 = row*math.sqrt(3)/2
-        x2 = pos[1]+pos[0]/2
-        y2 = pos[0]*math.sqrt(3)/2
-        
-        return math.sqrt( (x1-x2)**2 + (y1-y2)**2 )
+                    print('distance', gameState.distance(row,col,lastMove))
+                    print('between', (row,col), 'and', lastMove)
         
         
     def makeMove(self,gameState):
