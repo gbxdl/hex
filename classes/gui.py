@@ -1,56 +1,25 @@
 from tkinter import *
-from classes.human import *
 import math
 import time
 
 class gui:
     
     def __init__(self,window,gameState):
-        self.canvasWidth = 1300
-        self.canvasHeight = 800
+        self.canvasWidth = 1000
+        self.canvasHeight = 600
         self.window = window
+        try:
+            self.window.title('Hex')
+        except:
+            pass
         self.gameState = gameState
         self.width = self.canvasHeight / (self.gameState.sizeBoard)
         self.fromTheEdge=self.width
-        self.window.title('Hex')
         
     def initInteract(self):
         self.drawCanvas()
+        self.restartButton()        
         self.drawLattice()
-        self.restartButton()
-        if self.gameState.humans == [False,False]:
-            self.gamePlay()
-        else:
-            self.window.bind("<Button-1>", self.gamePlay)
-
-    def gamePlay(self,event=None):
-        man = human()
-        while 1:
-            move = 0
-            print(self.gameState.onMove)
-            if event and self.gameState.onMove == 1:
-                move = man.makeMove(self.gameState, event, self.fromTheEdge, self.width)
-            elif self.gameState.onMove == 2:
-                move = self.gameState.bot.makeMove(self.gameState)
-                print('bot move', move)
-                # time.sleep(.1)
-            if move==0:
-                return
-            self.gameState.position[move]=self.gameState.onMove
-            self.gameState.lastMove = move
-            self.drawMove(move[0],move[1])
-            self.window.update()
-            # print(self.gameState.position)
-            gameover=self.gameState.gameover()
-            if gameover:
-                if self.gameState.onMove==1:
-                    print('Blue won!')
-                else:
-                    print('Red won!')
-                if self.gameState.humans != [False,False]:
-                    self.window.unbind("<Button-1>")
-                return
-            self.gameState.onMove=3-self.gameState.onMove
         
     def drawMove(self,row,col):#draws the move at coordinates row,col
         hexagon = self.hexagon(row,col)
@@ -70,6 +39,7 @@ class gui:
                 self.canvas.create_polygon(hexagon,fill='white',outline='black', width=2)
                 
     def drawPosition(self):
+        self.window = Tk()
         self.drawCanvas()
         for row in range(self.gameState.sizeBoard):
             for col in range(self.gameState.sizeBoard):
@@ -80,10 +50,11 @@ class gui:
                     self.canvas.create_polygon(hexagon,fill='blue',outline='black', width=2)
                 else:
                     self.canvas.create_polygon(hexagon,fill='red',outline='black', width=2)
+        self.window.mainloop()
         
     def hexagon(self,row,col): #draw a hexagon around position x,y with R, r as on https://en.wikipedia.org/wiki/Hexagon
         x = (col+row/2)*self.width + self.fromTheEdge
-        y=row*(math.sqrt(3)/2*self.width) + self.fromTheEdge
+        y = row*(math.sqrt(3)/2*self.width) + self.fromTheEdge
         r = self.width/2
         R = r * 2/math.sqrt(3)
         top=(x,y-R)
@@ -95,13 +66,13 @@ class gui:
         return [top,topRight,bottomRight,bottom,bottomLeft,topLeft]
         
     def restartButton(self):
-        reset_button = Button(self.window, text="New game",command = self.restart())
-        reset_button.pack(side=LEFT)
+        self.resetButton = Button(self.window, text="New game", command = self.restart )
+        self.resetButton.pack(side=LEFT)
     
     def restart(self):
         self.gameState.resetGameState()
         self.canvas.destroy()
-        self.drawCanvas()
-        self.drawLattice()
-    
+        self.resetButton.destroy()#is dit hoe je dit wil doen. De button moet zichzelf weggooien. Maar moet ie een class var zijn?
+        self.initInteract()
         
+    
