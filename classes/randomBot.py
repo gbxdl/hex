@@ -1,6 +1,5 @@
 import random
 import time
-from classes.gameState import *
 
 class randomBot():
 
@@ -11,8 +10,19 @@ class randomBot():
         try:
             return random.choice(list(gameState.possibleMoves()))
         except:
-            move=0
             print(gameState.position)
             print(gameState.discovered)
             print(list(gameState.possibleMoves()))
+            print('gameover:', gameState.gameover())
+            blueWin=False
+            redWin=False
+            for dis in gameState.discovered[0]:
+                if dis in gameState.finishlist[0]:
+                    blueWin=True
+            for dis in gameState.discovered[1]:
+                if dis in gameState.finishlist[1]:
+                    redWin=True
+            print('Blue should have won:', blueWin)
+            print('Red should have won:', redWin)
+            print(gameState.finishlist)
             time.sleep(10)
