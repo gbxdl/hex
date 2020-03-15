@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from classes.randomBot import *
 from classes.defenseBot import *
 from classes.attackBot import *
@@ -75,13 +76,14 @@ class gameState:
                 neighbours.append(pos2)
         return neighbours
         
-    def distance(self,pos1,pos2):#calculate distance between two possitions in ...
-        x1 = col+row/2
-        y1 = row*math.sqrt(3)/2
-        x2 = pos[1]+pos[0]/2
-        y2 = pos[0]*math.sqrt(3)/2
-        
-        return math.sqrt( (x1-x2)**2 + (y1-y2)**2 )
+    def euclidDistance(self,pos1,pos2):#calculate distance between two possitions in hex widths = radius circle 
+        x1 = pos1[1]+pos1[0]/2#actual x location in the hex grid is shifted half a width to the right per line
+        y1 = pos1[0]*math.sqrt(3)/2 #actual y location is different due to difference in 
+        x2 = pos2[1]+pos2[0]/2
+        y2 = pos2[0]*math.sqrt(3)/2
+        xdiff= abs(x1-x2)
+        ydiff= abs(y1-y2)
+        return math.sqrt(xdiff**2 + ydiff**2)
         
     def resetGameState(self):
         self.position = self.startPosition(self.sizeBoard)
