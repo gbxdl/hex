@@ -13,12 +13,12 @@ class gameState:
         self.sizeBoard = 11
         self.position = self.startPosition(self.sizeBoard)
         self.humans = [False,False]
-        self.guiOn = True
+        self.guiOn = False
         if any(self.humans)==True:
             self.guiOn=True
         self.showFinalPosition = False
-        self.bot = potentialBot(self)
-        self.bot2 = randomBot()
+        self.bot = randomBot()
+        self.bot2 = potentialBot(self)
         self.man = human()
         self.lastMove=[]
         self.onMove=1

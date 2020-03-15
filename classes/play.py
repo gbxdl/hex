@@ -49,7 +49,7 @@ class play:
                 move = self.gameState.bot.makeMove(self.gameState)#bot 1 make move
             elif self.gameState.onMove==2: #second bot
                 move = self.gameState.bot2.makeMove(self.gameState)#bot 2 make move
-            if self.gameState.guiOn: time.sleep(1) #slow down a bit after a bot move so you can view
+            if self.gameState.guiOn: time.sleep(.1) #slow down a bit after a bot move so you can view
             if self.gameState.humans[2-self.gameState.onMove] == True: #if the next player is a human exit this loop.
                 return [move,False]
         return [move,True]
