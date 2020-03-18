@@ -41,23 +41,16 @@ class potentialBot: #normalize by making each field a probability of moving ther
         
         for row in range(gameState.sizeBoard):
             for col in range(gameState.sizeBoard):
-                [dy,dx] = gameState.euclidDistanceYX((row,col),lastMove)
-                dy = abs(dy)
-                dx = abs(dx)
+                [dy,dx] = gameState.euclidDistanceYX(lastMove,(row,col))
+                # dy = abs(dy)
+                # dx = abs(dx)
                 #these are orthogonal directions but the directions of players isnt' orthogonal. Makes an angle of 30. Cos(30)=sqrt(3)/2
                 if dx==dy==0:
                     dxSkewed=0
                     dySkewed=0
                 else:
-                    distanceRowCol= math.sqrt(dx*dx+dy*dy)#z in notes
-                    angleRelativeToOrth= math.acos(dx/distanceRowCol) #tau in notes
-                    angleRelativeToSkewed = angleRelativeToOrth + (math.pi/6) #phi in notes
-                    
-                    # dxSkewed = distanceRowCol - math.cos(angleRelativeToSkewed)
-                    dxSkewed = dx * math.cos(math.pi/6) + dy*math.sin(math.pi/6)
-                    dySkewed = dx * math.cos(math.pi/6) + dy*math.sin(math.pi/6)
-                    # dxSkewed = dx
-                    # dySkewed = distanceRowCol * math.sin(angleRelativeToSkewed)
+                    dxSkewed = dx * math.cos(-math.pi/6) + dy*math.sin(-math.pi/6)
+                    dySkewed = - dx * math.sin(-math.pi/6) + dy*math.cos(-math.pi/6)
                 
                 if lastMoveByMe:
                     constant = self.ownColorConstant
