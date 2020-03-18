@@ -35,7 +35,7 @@ class play:
             self.gameState.updateBfs()
             gameover=self.gameState.gameover() #See if someone has won.
             if gameover:
-                self.noMorePlay(GUI,False) #takes bool print winner
+                self.noMorePlay(GUI,self.gameState.printWinner) #takes bool print winner
                 return self.gameState.onMove
             self.gameState.onMove=3-self.gameState.onMove #update who is on move for the next turn. Last thing since gameover still uses who is on move as 'last move by'.
             
@@ -49,7 +49,7 @@ class play:
                 move = self.gameState.bot.makeMove(self.gameState)#bot 1 make move
             elif self.gameState.onMove==2: #second bot
                 move = self.gameState.bot2.makeMove(self.gameState)#bot 2 make move
-            if self.gameState.guiOn: time.sleep(.1) #slow down a bit after a bot move so you can view
+            if self.gameState.guiOn: time.sleep(self.gameState.sleeptime) #slow down a bit after a bot move so you can view
             if self.gameState.humans[2-self.gameState.onMove] == True: #if the next player is a human exit this loop.
                 return [move,False]
         return [move,True]

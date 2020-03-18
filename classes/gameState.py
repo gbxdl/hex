@@ -14,11 +14,15 @@ class gameState:
         self.position = self.startPosition(self.sizeBoard)
         self.humans = [False,False]
         self.guiOn = False
+        self.sleeptime = .2
         if any(self.humans)==True:
             self.guiOn=True
         self.showFinalPosition = False
-        self.bot = randomBot()
-        self.bot2 = potentialBot(self)
+        self.printWinner = False
+        self.bot = potentialBot(self)
+        # self.bot2 = defenseBot(self)
+        # self.bot = defenseBot(self)
+        self.bot2 = randomBot(self)
         self.man = human()
         self.lastMove=[]
         self.onMove=1
@@ -76,18 +80,22 @@ class gameState:
                 neighbours.append(pos2)
         return neighbours
         
-    def euclidDistance(self,pos1,pos2):#calculate distance between two possitions in hex widths = radius circle 
+    def euclidDistanceYX(self,pos1,pos2):#calculate distance between two possitions in hex widths = radius circle 
         x1 = pos1[1]+pos1[0]/2#actual x location in the hex grid is shifted half a width to the right per line
         y1 = pos1[0]*math.sqrt(3)/2 #actual y location is different due to difference in 
         x2 = pos2[1]+pos2[0]/2
         y2 = pos2[0]*math.sqrt(3)/2
-        xdiff= abs(x1-x2)
-        ydiff= abs(y1-y2)
-        return math.sqrt(xdiff**2 + ydiff**2)
-        
+        xdiff= x1-x2
+        ydiff= y1-y2
+        return [ydiff,xdiff]
+    
     def resetGameState(self):
         self.position = self.startPosition(self.sizeBoard)
+        self.bot.__init__(self)
+        self.bot2.__init__(self)
         self.initBfs()
+            
+        
         
         
         

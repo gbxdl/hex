@@ -3,7 +3,7 @@ import time
 
 class randomBot():
 
-    def __init__(self):
+    def __init__(self,gameState):
         None
 
     def makeMove(self,gameState):

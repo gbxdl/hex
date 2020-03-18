@@ -3,7 +3,7 @@ import random
 
 class defenseBot:
     
-    def __init__(self):
+    def __init__(self,gameState):
         pass
         
     def makeMove(self,gameState):

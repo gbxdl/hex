@@ -3,7 +3,7 @@ import random
 
 class attackBot:
     
-    def __init__(self):
+    def __init__(self,gameState):
         self.firstMove=True
         #idea: find the most bottom/right element of discovered and attach bottom/right random. If not possible take second furthest.
         

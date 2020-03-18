@@ -8,7 +8,7 @@ play = play(gameState)
 # play.run()
 
 tic=time.time()
-numGames=1000
+numGames=100
 winner=[0,0]
 for i in range(numGames):
     result=play.run()

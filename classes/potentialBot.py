@@ -10,9 +10,9 @@ class potentialBot: #normalize by making each field a probability of moving ther
         self.potential = np.zeros(([gameState.sizeBoard,gameState.sizeBoard]))
         self.basisConstant = .01
         self.ownColorConstant=1
-        self.otherColorConstant=1.1
+        self.otherColorConstant=1.2
         # self.meanGaussGood = 4/math.sqrt(3)
-        self.meanGaussGood = 10
+        self.meanGaussGood = 4
         self.meanGaussBad = 0
         self.stdGaussGood = 1.5
         self.stdGaussBad = .5
@@ -42,8 +42,6 @@ class potentialBot: #normalize by making each field a probability of moving ther
         for row in range(gameState.sizeBoard):
             for col in range(gameState.sizeBoard):
                 [dy,dx] = gameState.euclidDistanceYX(lastMove,(row,col))
-                # dy = abs(dy)
-                # dx = abs(dx)
                 #these are orthogonal directions but the directions of players isnt' orthogonal. Makes an angle of 30. Cos(30)=sqrt(3)/2
                 if dx==dy==0:
                     dxSkewed=0
@@ -63,11 +61,11 @@ class potentialBot: #normalize by making each field a probability of moving ther
                 else: #last move was my opponents move.
                     constant = self.otherColorConstant
                     if myColor==1:
-                        goodDirection = dx #If my opponennt is red he want to go skewed so I should go sideways compared to his stone
-                        badDirection = dy
+                        goodDirection = dxSkewed #If my opponennt is red he want to go skewed so I should go sideways compared to his stone
+                        badDirection = dySkewed
                     else:
-                        goodDirection = dySkewed#defend the straight up
-                        badDirection = dxSkewed
+                        goodDirection = dy#defend the straight up
+                        badDirection = dx
 
                 # print(dy,dx)
 
