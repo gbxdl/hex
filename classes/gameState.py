@@ -9,22 +9,33 @@ from collections import deque
 
 
 class gameState:
-    def __init__(self):
+    def __init__(self, args):
         self.sizeBoard = 11
         self.position = self.startPosition(self.sizeBoard)
-        self.humans = [True, False]
-        self.guiOn = False
-        self.printWinner = False
+
+        self.humans = [args.player1 == "human", args.player2 == "human"]
+        self.guiOn = args.gui
+        self.printWinner = args.print_winner
         self.sleeptime = 0.2
-        if any(self.humans) == True:
+
+        if any(self.humans):
             self.guiOn = True
             self.printWinner = True
         self.showFinalPosition = False
 
-        self.bot = potentialBot(self)
-        self.bot2 = defenseBot(self)
-        # self.bot = defenseBot(self)
-        # self.bot2 = potentialBot(self)
+        if args.player1 == "potential":
+            self.bot = potentialBot(self)
+        elif args.player1 == "defend":
+            self.bot = defenseBot(self)
+        elif args.player1 == "attack":
+            self.bot = attackBot(self)
+        if args.player2 == "potential":
+            self.bot2 = potentialBot(self)
+        elif args.player2 == "defend":
+            self.bot2 = defenseBot(self)
+        elif args.player2 == "attack":
+            self.bot2 = attackBot(self)
+
         self.man = human()
         self.lastMove = []
         self.onMove = 1
@@ -126,6 +137,12 @@ class gameState:
     def resetGameState(self):
         self.position = self.startPosition(self.sizeBoard)
         self.onMove = 1
-        self.bot.__init__(self)
-        self.bot2.__init__(self)
+        try:
+            self.bot.__init__(self)
+        except AttributeError:
+            pass
+        try:
+            self.bot2.__init__(self)
+        except AttributeError:
+            pass
         self.initBfs()
