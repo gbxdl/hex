@@ -1,5 +1,4 @@
 from tkinter import Button, Canvas, Tk, LEFT
-import math
 
 from classes.gui_base import gui_base
 
@@ -55,21 +54,6 @@ class gui_tkinter(gui_base):
                         hexagon, fill="red", outline="black", width=2
                     )
         self.window.mainloop()
-
-    def hexagon(
-        self, row, col
-    ):  # draw a hexagon around position x,y with R, r as on https://en.wikipedia.org/wiki/Hexagon
-        x = (col + row / 2) * self.width + self.fromTheEdge
-        y = row * (math.sqrt(3) / 2 * self.width) + self.fromTheEdge
-        r = self.width / 2
-        R = r * 2 / math.sqrt(3)
-        top = (x, y - R)
-        bottom = (x, y + R)
-        topLeft = (x - r, y - R / 2)
-        bottomLeft = (x - r, y + R / 2)
-        topRight = (x + r, y - R / 2)
-        bottomRight = (x + r, y + R / 2)
-        return [top, topRight, bottomRight, bottom, bottomLeft, topLeft]
 
     def restartButton(self):
         self.resetButton = Button(self.window, text="New game", command=self.restart)

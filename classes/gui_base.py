@@ -1,3 +1,6 @@
+import math
+
+
 class gui_base:
     def __init__(self, gameState, play):
         self.canvasWidth = 1000
