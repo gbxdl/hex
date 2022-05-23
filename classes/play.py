@@ -1,19 +1,20 @@
 import time
 from tkinter import Tk
-from classes.gui_tkinter import gui_tkinter
+
 from classes.gui_flask import gui_flask
+from classes.gui_tkinter import gui_tkinter
 
 
 class play:
-    def __init__(self, gameState, web_gui: bool = False):
+    def __init__(self, gameState, app=None):
         self.gameState = gameState
-        self.web_gui = web_gui
+        self.app = app
         self.GUI = None
 
     def run(self):
         if self.gameState.guiOn:  # GUI on
             # print("GUI is on")
-            if not self.web_gui:
+            if self.app == None:
                 window = Tk()
                 GUI = gui_tkinter(window, self.gameState, self)
                 self.GUI = GUI

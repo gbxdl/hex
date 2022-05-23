@@ -1,7 +1,9 @@
+import math
+import random
+
 import numpy as np
 from numpy import unravel_index
-import random
-import math
+
 #idea is to define a potential field depending on the position of your stones and enemy stone and take make the move with the highest potential. Or take probablity depending on potential. Boltzman or something. Normalize first.
 
 class potentialBot: #normalize by making each field a probability of moving there.

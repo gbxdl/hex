@@ -1,5 +1,7 @@
-from classes.gameState import *
 import random
+
+from classes.gameState import *
+
 
 class attackBot:
     

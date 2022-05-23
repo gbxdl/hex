@@ -1,11 +1,13 @@
-import numpy as np
 import math
-from classes.randomBot import *
-from classes.defenseBot import *
-from classes.attackBot import *
-from classes.potentialBot import *
-from classes.human import *
 from collections import deque
+
+import numpy as np
+
+from classes.attackBot import *
+from classes.defenseBot import *
+from classes.human import *
+from classes.potentialBot import *
+from classes.randomBot import *
 
 
 class gameState:

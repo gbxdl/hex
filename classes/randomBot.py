@@ -1,6 +1,7 @@
 import random
 import time
 
+
 class randomBot():
 
     def __init__(self,gameState):
