@@ -24,3 +24,7 @@ class gui_base:
         topRight = (x + r, y - R / 2)
         bottomRight = (x + r, y + R / 2)
         return [top, topRight, bottomRight, bottom, bottomLeft, topLeft]
+
+    def update(self):
+        """update the gui state"""
+        pass

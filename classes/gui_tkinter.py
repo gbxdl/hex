@@ -67,3 +67,11 @@ class gui_tkinter(gui_base):
         self.window.bind(
             "<Button-1>", lambda event: self.play.gamePlay(event, self), self
         )  # rebind button.
+
+    def unbind(self):
+        """unbinds mouse"""
+        self.window.unbind("<Button-1>")
+
+    def update(self):
+        """updates window"""
+        self.window.update()

@@ -1,26 +1,32 @@
 import time
-from tkinter import Tk 
-from classes.gui_tkinter import gui_tkinter as gui
+from tkinter import Tk
+from classes.gui_tkinter import gui_tkinter
+from classes.gui_flask import gui_flask
 
 
 class play:
-    def __init__(self, gameState):
+    def __init__(self, gameState, web_gui: bool = False):
         self.gameState = gameState
+        self.web_gui = web_gui
+        self.GUI = None
 
     def run(self):
         if self.gameState.guiOn:  # GUI on
             # print("GUI is on")
-            window = Tk()
-            GUI = gui(window, self.gameState, self)
-            self.GUI = GUI
-            GUI.initInteract()
-            if self.gameState.humans == [False, False]:
-                self.gamePlay(None, GUI)
-            else:
-                GUI.window.bind(
-                    "<Button-1>", lambda event: self.gamePlay(event, GUI), GUI
-                )  # lambda takes event so then you can explicitly pass it together with something else.
-            window.mainloop()
+            if not self.web_gui:
+                window = Tk()
+                GUI = gui_tkinter(window, self.gameState, self)
+                self.GUI = GUI
+                GUI.initInteract()
+                if self.gameState.humans == [False, False]:
+                    self.gamePlay(None, GUI)
+                else:
+                    GUI.window.bind(
+                        "<Button-1>", lambda event: self.gamePlay(event, GUI), GUI
+                    )  # lambda takes event so then you can explicitly pass it together with something else.
+                window.mainloop()
+            else:  # web gui
+                self.GUI = gui_flask(self.gameState, self)
         else:  # GUI off
             return self.gamePlay(
                 None, None
@@ -40,7 +46,7 @@ class play:
             self.gameState.lastMove = move  # set last move to move.
             if self.gameState.guiOn:  # if the GUI is on draw the new position.
                 GUI.drawMove(move[0], move[1])
-                GUI.window.update()
+                GUI.update()
             self.gameState.updateBfs()
             gameover = self.gameState.gameover()  # See if someone has won.
             if gameover:
@@ -83,6 +89,6 @@ class play:
             else:
                 print("Red won!")
         if self.gameState.humans != [False, False] and self.gameState.guiOn:
-            GUI.window.unbind("<Button-1>")
+            GUI.unbind()
         elif self.gameState.showFinalPosition:
             GUI.drawPosition()
