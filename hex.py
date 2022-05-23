@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-
 import argparse
 
-from classes.gameState import *
-from classes.play import *
-import time
+from classes.gameState import gameState
+from classes.play import play
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--gui", action="store_true", help="use GUI", default=False)
@@ -33,15 +31,3 @@ if __name__ == "__main__":
 
     play = play(gameState)
     play.run()
-
-    # tic=time.time()
-    # numGames=100
-    # winner=[0,0]
-    # for i in range(numGames):
-    #     result=play.run()
-    #     winner[result-1]+=1
-    #     gameState.resetGameState()
-
-    # print('Out of', numGames, 'Blue won', winner[0], 'times and Red won', winner[1], 'times')
-    # toc=time.time()
-    # print(toc-tic,'seconds')

@@ -25,3 +25,6 @@ Features:
 Hard part is to check if the game is over
 https://www.geeksforgeeks.org/find-whether-path-two-cells-matrix/
 one way is to use Breadth First Search. maybe Depth-first search is faster. Gotta handle multiple goals and starting points.
+
+# Web
+Let's make a web version using Flask

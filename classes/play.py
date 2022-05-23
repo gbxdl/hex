@@ -1,6 +1,6 @@
 import time
-from tkinter import *
-from classes.gui import *
+from tkinter import Tk 
+from classes.gui_tkinter import gui_tkinter as gui
 
 
 class play:

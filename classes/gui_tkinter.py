@@ -1,20 +1,14 @@
-from tkinter import *
+from tkinter import Button, Canvas, Tk, LEFT
 import math
 
+from classes.gui_base import gui_base
 
-class gui_tkinter:
+
+class gui_tkinter(gui_base):
     def __init__(self, window, gameState, play):
-        self.canvasWidth = 1000
-        self.canvasHeight = 600
+        super().__init__(gameState, play)
         self.window = window
-        try:
-            self.window.title("Hex")
-        except:
-            pass
-        self.gameState = gameState
-        self.play = play
-        self.width = self.canvasHeight / (self.gameState.sizeBoard)
-        self.fromTheEdge = self.width
+        self.window.title("Hex")
 
     def initInteract(self):
         self.drawCanvas()
