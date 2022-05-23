@@ -1,5 +1,6 @@
 import math
 
+
 class human:
     def __init__(self):
         pass

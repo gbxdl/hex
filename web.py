@@ -1,37 +1,26 @@
 """
 Starts the flask app and calls hex.
 """
-import argparse
+from dataclasses import dataclass
+
 from flask import Flask, render_template
 
 from classes.gameState import gameState
 from classes.play import play
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--gui", action="store_true", help="use GUI", default=False)
-parser.add_argument(
-    "--player1",
-    "-p1",
-    choices=["human", "attack", "defend", "potential"],
-    default="human",
-)
-parser.add_argument(
-    "--player2",
-    "-p2",
-    choices=["human", "attack", "defend", "potential"],
-    default="defend",
-)
-parser.add_argument(
-    "--print-winner",
-    action="store_true",
-    default=False,
-)
 
-args = parser.parse_args()
-gameState = gameState(args)
+@dataclass
+class settings:
+    """Place to set the things that are passed with arguemts in hex.py"""
 
-play = play(gameState)
-play.run()
+    def __init__(self):
+        self.gui = True
+        self.player1 = "human"
+        self.player2 = "human"
+        self.print_winner = True
+
+
+args = settings()
 
 # define flask app
 app = Flask(
@@ -40,10 +29,15 @@ app = Flask(
     static_folder="static",
 )
 
+gameState = gameState(args)
+
+play = play(gameState, app=app)
+play.run()
+
 
 @app.route("/")
-def home_page_svb() -> str:
+def home_page_hex() -> str:
     """
-    Loads page.
+    Loads starting page.
     """
     return render_template("hex.html")

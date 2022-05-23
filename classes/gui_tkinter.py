@@ -1,4 +1,4 @@
-from tkinter import Button, Canvas, Tk, LEFT
+from tkinter import LEFT, Button, Canvas, Tk
 
 from classes.gui_base import gui_base
 
