@@ -14,7 +14,7 @@ class gui_flask(gui_base):
 
     def __init__(self, gameState, play):
         super().__init__(gameState, play)
-        self.app = play.app
+        self.play = play
         self.init_buttons()
 
     def init_buttons(self) -> None:
@@ -26,7 +26,7 @@ class gui_flask(gui_base):
             "start_game": self.start,
         }
 
-        @self.app.route("/", methods=["POST"])
+        @self.play.app.route("/", methods=["POST"])
         def submit() -> Union[str, Response]:
             name = request.form.get("top-row-button")
             if name in map_name_to_callback:
@@ -37,4 +37,4 @@ class gui_flask(gui_base):
 
     def start(self):
         """starts the game"""
-        pass
+        self.play.gameplay(None, self)
