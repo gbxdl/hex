@@ -15,6 +15,11 @@
         </form>
     </div>
 
+    {% if winner %}
+        <h2> {{winner}} wins! </h2>
+    {% endif %}
+
+
     {% if canvas_width %}
         <canvas id="canvas" width="{{canvas_width}}" height="{{canvas_height}}"></canvas>
     {% endif %}
@@ -80,21 +85,23 @@
         {% if hexagons_p1 %}
             hex_p1 = {{hexagons_p1}}
             for (let i=0; i<hex_p1.length; i++){
-                drawHexagon(ctx, hex_p1[i], color="#f00", fill=true)
+                drawHexagon(ctx, hex_p1[i], color="#00f", fill=true)
             }
         {% endif %}
         {% if hexagons_p2 %}
             hex_p2 = {{hexagons_p2}}
             for (let i=0; i<hex_p2.length; i++){
-                drawHexagon(ctx, hex_p2[i], color="#00f", fill=true)
+                drawHexagon(ctx, hex_p2[i], color="#f00", fill=true)
             }
         {% endif %}
 
         {% if playing %}
+            console.debug("{{playing}}")
             canvas.addEventListener("click", onClick, false);
             var start_button = document.getElementById("start_game")
             start_button.innerHTML = "Restart"
         {% endif %}
+
     </script>
 
 </body>

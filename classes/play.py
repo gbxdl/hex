@@ -88,8 +88,10 @@ class play:
         if printWinner:
             if self.gameState.onMove == 1:
                 print("Blue won!")
+                self.gameState.winner = "Blue"
             else:
                 print("Red won!")
+                self.gameState.winner = "Red"
         if self.gameState.humans != [False, False] and self.gameState.guiOn:
             GUI.unbind()
         elif self.gameState.showFinalPosition:

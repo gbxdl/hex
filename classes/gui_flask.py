@@ -45,7 +45,7 @@ class gui_flask(gui_base):
                 click_data = request.form.get("canvas-click")
                 fake_event.x, fake_event.y = map(int, click_data.split(","))
                 self.play.gamePlay(fake_event, self)
-            return self.update()
+            return self.template()
 
     def drawLattice(self):
         """creates the background lattice as a list to be rendered by view"""
@@ -61,26 +61,32 @@ class gui_flask(gui_base):
         else:
             self.hexagons_p2.append(self.hexagon(x, y))
 
-    def start(self):
-        """starts the game"""
-        pass
-
     def reset(self):
+        """resets gamestate and list of hexagons"""
         self.hexagons_p1 = []
         self.hexagons_p2 = []
         self.gameState.resetGameState()
 
     def unbind(self):
-        pass
+        """unbinds mouse so no more moves can be played."""
+        self.gameState.playing = False
 
     def update(self):
-        """redraw the website"""
+        pass
+        # trying to get the page to reload after human makes move
+        # @self.play.app.route("/")
+        # def submit_bot():
+        #     return self.template()
+
+    def template(self):
+        """return the website"""
         return render_template(
             "hex.html.j2",
             background_lattice=self.background_lattice,
             canvas_width=self.canvasWidth,
             canvas_height=self.canvasHeight,
-            playing=True,
+            playing=self.gameState.playing,
             hexagons_p1=self.hexagons_p1,
             hexagons_p2=self.hexagons_p2,
+            winner=self.gameState.winner,
         )

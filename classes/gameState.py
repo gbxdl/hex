@@ -14,15 +14,16 @@ class gameState:
     def __init__(self, args):
         self.sizeBoard = 11
         self.position = self.startPosition(self.sizeBoard)
+        self.playing = False
+        self.winner = None
 
         self.humans = [args.player1 == "human", args.player2 == "human"]
         self.guiOn = args.gui
         self.printWinner = args.print_winner
-        self.sleeptime = 0.2
+        self.sleeptime = 0
 
         if any(self.humans):
             self.guiOn = True
-            self.printWinner = True
         self.showFinalPosition = False
 
         if args.player1 == "potential":
@@ -148,3 +149,5 @@ class gameState:
         except AttributeError:
             pass
         self.initBfs()
+        self.playing = True
+        self.winner = None

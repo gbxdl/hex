@@ -16,8 +16,8 @@ class settings:
     def __init__(self):
         self.gui = True
         self.player1 = "human"
-        self.player2 = "defend"
-        self.print_winner = True
+        self.player2 = "attack"
+        self.print_winner = False
 
 
 args = settings()
