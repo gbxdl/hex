@@ -16,7 +16,7 @@ class settings:
     def __init__(self):
         self.gui = True
         self.player1 = "human"
-        self.player2 = "human"
+        self.player2 = "defend"
         self.print_winner = True
 
 
@@ -40,4 +40,4 @@ def home_page_hex() -> str:
     """
     Loads starting page.
     """
-    return render_template("hex.html")
+    return render_template("hex.html.j2")

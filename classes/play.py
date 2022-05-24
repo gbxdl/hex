@@ -28,6 +28,7 @@ class play:
                 window.mainloop()
             else:  # web gui
                 self.GUI = gui_flask(self.gameState, self)
+                self.GUI.drawLattice()
         else:  # GUI off
             return self.gamePlay(
                 None, None

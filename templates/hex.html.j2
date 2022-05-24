@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/hex.css">
+</head>
+<html>
+
+<body>
+    <div>
+        <form method="POST" enctype="multipart/form-data">
+            <button class="button-3" type="submit" id="start_game" name='main-form' value="start_game"> Start
+            </button>
+        </form>
+    </div>
+
+    {% if canvas_width %}
+        <canvas id="canvas" width="{{canvas_width}}" height="{{canvas_height}}"></canvas>
+    {% endif %}
+
+    <script>
+        function drawHexagon(ctx, hexagon, color = '#000', fill = false) {
+            ctx.fillStyle = color
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(hexagon[0][0], hexagon[0][1]);
+            for (let ipoint = 1; ipoint < hexagon.length; ipoint++) {
+                ctx.lineTo(hexagon[ipoint][0], hexagon[ipoint][1]);
+            }
+            ctx.closePath();
+
+            if (fill){
+                ctx.fill();
+            }
+            else{
+                ctx.stroke();
+            }
+        }
+
+        function onClick(e) {
+            var offsetX = canvas.offsetLeft
+            var offsetY = canvas.offsetTop;
+
+            x = e.pageX - offsetX;
+            y = e.pageY - offsetY;
+            console.debug(x,y);
+            send_canvas_click([x,y])
+        }
+
+        function send_canvas_click(data) {
+            const form = document.createElement('form');
+            form.method = "POST";
+            form.enctype = "multipart/form-data"
+            document.body.appendChild(form);
+
+            const formField = document.createElement('input');
+            formField.type = 'hidden';
+            formField.name = "canvas-click";
+            formField.value = data;
+            form.appendChild(formField);
+
+            form.submit();
+        }
+
+        {% if canvas_width %}
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+        {% endif %}
+
+        {# Draw background Lattice #}
+        {% if background_lattice %}
+            bl = {{background_lattice}}
+            for (let i=0; i<bl.length; i++){
+                drawHexagon(ctx, bl[i])
+            }
+        {% endif %}
+
+        {# Draw hexagons players#}
+        {% if hexagons_p1 %}
+            hex_p1 = {{hexagons_p1}}
+            for (let i=0; i<hex_p1.length; i++){
+                drawHexagon(ctx, hex_p1[i], color="#f00", fill=true)
+            }
+        {% endif %}
+        {% if hexagons_p2 %}
+            hex_p2 = {{hexagons_p2}}
+            for (let i=0; i<hex_p2.length; i++){
+                drawHexagon(ctx, hex_p2[i], color="#00f", fill=true)
+            }
+        {% endif %}
+
+        {% if playing %}
+            canvas.addEventListener("click", onClick, false);
+            var start_button = document.getElementById("start_game")
+            start_button.innerHTML = "Restart"
+        {% endif %}
+    </script>
+
+</body>
+
+</html>
